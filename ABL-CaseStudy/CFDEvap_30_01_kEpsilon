@@ -1,0 +1,28 @@
+#PBS -l nodes=2:ppn=12
+#PBS -N CFDEvap_30_01_kEpsilon
+#PBS -m abe -M a.abbasi@tudelft.nl
+#$ -m e
+cd $PBS_O_WORKDIR
+module load openfoam/2.2.2
+#module load mpi/openmpi-1.5.3-gnu
+source /opt/OpenFOAM-2.2.2/OpenFOAM-2.2.2/etc/bashrc
+#LD_LIBRARY_PATH="/opt/OpenFOAM-2.1.1-2/ThirdParty-2.1.1/platforms/linux64Gcc:$LD_LIBRARY_PATH"
+#export LD_LIBRARY_PATH
+#echo "WorkingDirectory is: " $PBS_O_WORKDIR
+#echo "running:" `which mpirun` " with lib: " $LD_LIBRARY_PATH 
+#echo "Job is running on:" 
+echo "Starting at "
+date
+#rm -rf processor*
+#rm -rf postProcessing
+#rm -rf LSS_02.*
+#rm -rf TestMPI*
+#rm -rf log*
+#blockMesh
+#decomposePar
+np=24
+mpiexec -np $np ABLbuoyantBoussinesqPimpleFoam_SS -parallel | tee  log_run.$PBS_JOBID
+#LakebuoyantBoussinesqPimpleFoam_05 | tee  log_run_48cpu.$PBS_JOBID
+#reconstructPar | tee  log_reconst.$PBS_JOBID
+echo "Run completed at "
+date
