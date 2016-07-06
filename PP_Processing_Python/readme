@@ -1,1 +1,4 @@
-
+This folder include the python codes for pre- and post-processing the ABL_Model. 
+Pre_processing activities include reading the measurements (data in csv format) and preparing the readable input files 
+(e.g. boundary conditions, initial conditions, etc.) for the OF solver.
+Post-processing activities include reading the outputs and preparing the desired graphs for model evaluations.
