@@ -1,0 +1,117 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.2                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p_rgh;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+#include        "include/initialConditions"
+
+#include        "include/ABLConditions"
+
+internalField   uniform 0;
+
+boundaryField
+{
+    top
+    {
+      type           symmetryPlane;//slip;  
+      //type            buoyantPressure;//fixedFluxPressure;
+      //rho             rhok;
+      //value           uniform 0;
+//       type            fixedFluxPressure;
+//       rho             rhok;
+//       value           uniform 1e5;
+        //type            fixedFluxPressure;
+        //rho             rhok;
+       // value           uniform 0;
+       //type          calculated;//
+    }
+
+
+    terrain
+    {
+        //type            zeroGradient;
+	type            fixedFluxPressure;
+        rho             rhok;
+        value           uniform 0.0;
+    }
+
+
+    inlet
+    {
+     type           zeroGradient;  
+     value           uniform 0;
+     //type            fixedFluxPressure;
+     //rho             rhok;
+     //value           uniform 1e5;
+//       type            fixedFluxPressure;
+//       rho             rhok;
+//       value           uniform 1e5;
+     //   type            fixedValue; //  Ref. no. TH05
+      //  value           uniform $pressure;
+    }
+
+
+    outlet
+    {
+      type            fixedValue;//cyclic;//buoyantPressure;//fixedFluxPressure;
+      value           uniform 0;
+      //rho             rhok;
+      //value           uniform 0;
+//      type           fixedFluxPressure;
+//      rho             rhok;
+//      value           uniform 1e5;
+       // type            fixedFluxPressure;
+       // rho             rhok;
+        //value           uniform 0;
+    }
+
+
+/*    frontAndBack
+    {
+        type            empty;
+    }
+*/
+    front
+    {
+     type           symmetryPlane;//slip;//zeroGradient;  
+     // type            buoyantPressure;//fixedFluxPressure;
+      //rho             rhok;
+      //value           uniform 0;
+//        type            fixedFluxPressure;
+//        rho             rhok;
+//        value           uniform 1e5;
+    }
+
+    back
+    {
+       type           symmetryPlane;//slip;//zeroGradient;  
+      //type            buoyantPressure;//fixedFluxPressure;
+      //rho             rhok;
+      //value           uniform 0;
+//         type            fixedFluxPressure;
+//         rho             rhok;
+//         value           uniform 1e5;
+    }
+    lake
+    {
+      //type           zeroGradient;  
+      type            fixedFluxPressure;
+      rho             rhok;
+      value           uniform 0;
+    }
+
+ }
+
+// ************************************************************************* //

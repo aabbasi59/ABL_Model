@@ -1,0 +1,217 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.2                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 302.27;
+
+boundaryField
+{
+  inlet
+    {
+        type            uniformFixedValue;//groovyBC;
+        uniformValue     tableFile;
+        tableFileCoeffs
+          {
+             fileName     "$FOAM_CASE/Tair.data"
+             outOfBounds  clamp;
+          } 
+    }
+       
+    outlet
+    {
+       type           zeroGradient;//cyclic;//fixedValue;
+        //value           uniform 291.02;
+     }
+ 
+
+    top
+    {
+	type		symmetryPlane;//slip;//zeroGradient;
+    }
+
+
+    terrain
+    {
+       type           zeroGradient;
+//        type            groovyBC;
+//        value           uniform 302.27;
+//        gradientExpression "gradT";
+//        fractionExpression "0";
+//        evaluateDuringConstruction 0;
+//        variables       
+//             (
+// 	      "cp=1.005e3;"
+// 	      "rho_a=1.186;"
+// 	      "dvis=15.11e-06;" 
+// 	      "nump=0.713;" 
+//               "gradT= (H_land+E_land)/(alphaEff*cp*rho_a);"
+//             )
+// ;
+//        timelines (
+// {
+//         name            H_land;
+//         fileName        "$FOAM_CASE/senHeat_land_m.data";
+//         outOfBounds     clamp;
+// }
+// {
+//         name            E_land;
+//         fileName        "$FOAM_CASE/latHeat_land_m.data";
+//         outOfBounds     clamp;
+// }
+// );
+//         lookuptables    (
+// {
+//         name            H_landLookup;
+//         fileName        "$FOAM_CASE/senHeat_land_m.data";
+//         outOfBounds     clamp;
+// }
+// {
+//         name            E_landLookup;
+//         fileName        "$FOAM_CASE/latHeat_land_m.data";
+//         outOfBounds     clamp;
+// }
+// );
+    }
+
+    front
+    {
+        type            symmetryPlane;//slip;
+    }
+
+    back
+    {
+        type            symmetryPlane;//slip;
+    }
+
+    lake
+    {
+        type            uniformFixedValue;//groovyBC;
+        uniformValue     tableFile;
+        tableFileCoeffs
+          {
+             fileName     "$FOAM_CASE/Ts.data"
+             outOfBounds  clamp;
+          }
+
+//        type            groovyBC;
+//        value           uniform 302.09;
+//         //valueExpression "0";
+//         gradientExpression "gradT";
+//         fractionExpression "0";
+//         evaluateDuringConstruction 0;
+// 	//debugCommonDriver 1;
+//         //debug 1;
+//         variables       
+//             (
+// 	      "cp_w=4.1818e03;"
+// 	      "epsilon_rad=0.87;"
+// 	      "epsilon_rad_w=0.97;"
+// 	      "sigma_rad=5.67e-8;"
+// 	      "r_l=0.03;"
+// 	      "rho0=998.2336;"
+// 	      "rho_a=1.186;"
+// 	      "Patm=102000;" //Pa
+// 	      "dvis=15.11e-06;" 
+// 	      "nump=0.713;" 
+// 	      "hs=2.1954 * U2 + 1.0419;"
+// 	      "hm=0.0016252 * U2 + 0.0007712;"
+// 	      "es= 6.11* exp(17.27*(T-273.15)/(237.3+T-273.15))*100;"
+// 	      "ea=(6.11* exp(17.27*(Tair-273.15)/(237.3+Tair-273.15))*100)*RH/100;"
+// 	      "Xa=0.622 * ea /(Patm-ea);"
+// 	      "Xs=0.622 * es /(Patm-es);"
+//  	      "H_V=hm * (Xs-Xa)* rho_a*24*3600*28.4;"
+// 	      "H_S=hs*(T-Tair);"
+//  	      "H_LA=(1-r_l)*(epsilon_rad*sigma_rad*pow((Tair),4));"
+//       	      "H_LW=epsilon_rad_w*sigma_rad*pow(T,4);"
+// 	      "H_net=(-H_LA+H_LW+H_S+H_V)-H_SW;"
+// 	      "gradT= H_net/(alphaEff*cp_w*rho0);"
+//             )
+// 
+// ;
+//         timelines       (
+// 
+//  {
+//          name            H_SW;
+//          fileName        "$FOAM_CASE/sRadiation.data";
+//          outOfBounds     clamp;
+//  }
+// {
+//         name            Tair;
+//         fileName        "$FOAM_CASE/Tair.data";
+//         outOfBounds     clamp;
+// }
+// /*{
+//         name            U_y;
+//         fileName        "$FOAM_CASE/U_y.data";
+//         outOfBounds     clamp;
+// }*/
+// {
+//         name            U2;
+//         fileName        "$FOAM_CASE/U.data";
+//         outOfBounds     clamp;
+// }
+// /*{
+//         name            U_x;
+//         fileName        "$FOAM_CASE/U_x.data";
+//         outOfBounds     clamp;
+// }*/
+// {
+//         name            RH;
+//         fileName        "$FOAM_CASE/RH.data";
+//         outOfBounds     clamp;
+// }
+// /*{
+//         name            cloudCover;
+//         fileName        "$FOAM_CASE/cloud.data";
+//         outOfBounds     clamp;
+// }*/
+// );
+//         lookuptables    (
+// {
+//         name            RHLookup;
+//         fileName        "$FOAM_CASE/RH.data";
+//         outOfBounds     clamp;
+// }
+// /*{
+//         name            U_xLookup;
+//         fileName        "$FOAM_CASE/U_x.data";
+//         outOfBounds     clamp;
+// }*/
+// {
+//         name            U2Lookup;
+//         fileName        "$FOAM_CASE/U.data";
+//         outOfBounds     clamp;
+// }
+// {
+//         name            TairLookup;
+//         fileName        "$FOAM_CASE/Tair.data";
+//         outOfBounds     clamp;
+// }
+// /*{
+//         name            U_yLookup;
+//         fileName        "$FOAM_CASE/U_y.data";
+//         outOfBounds     clamp;
+// }*/
+// {
+//         name            H_SWLookup;
+//         fileName        "$FOAM_CASE/sRadiation.data";
+//         outOfBounds     clamp;
+// }
+// );
+    }
+}
+// ************************************************************************* //

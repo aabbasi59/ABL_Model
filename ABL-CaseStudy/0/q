@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.2.2                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      q;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 0.01953;
+
+boundaryField
+{
+  inlet
+    {
+        type            uniformFixedValue;//groovyBC;
+        uniformValue     tableFile;
+        tableFileCoeffs
+          {
+             fileName     "$FOAM_CASE/Xa.data"
+             outOfBounds  clamp;
+          } 
+    }
+       
+    outlet
+    {
+        type           zeroGradient;//cyclic;//fixedValue;
+        //value           uniform 291.02;
+     }
+ 
+
+    top
+    {
+	type		symmetryPlane;//slip;//zeroGradient;
+    }
+
+
+    terrain
+    {
+         type            fixedValue;
+         value           uniform 0.00;
+    }
+
+    front
+    {
+        type            symmetryPlane;//slip;//zeroGradient;//cyclic;
+    }
+
+    back
+    {
+        type            symmetryPlane;//slip;//zeroGradient;//cyclic;
+    }
+
+    lake
+    {
+        type            uniformFixedValue;//groovyBC;
+        uniformValue     tableFile;
+        tableFileCoeffs
+          {
+             fileName     "$FOAM_CASE/Xs.data"
+             outOfBounds  clamp;
+          } 
+    }
+}
+// ************************************************************************* //

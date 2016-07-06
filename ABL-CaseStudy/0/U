@@ -1,0 +1,97 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include        "include/initialConditions"
+
+dimensions      [0 1 -1 0 0 0 0];
+internalField   uniform $flowVelocity;
+
+boundaryField
+{
+    #include  "include/ABLConditions"
+
+   inlet
+       { 
+         type		groovyBC;
+	 valueExpression 	"vector(uStar/K*(log((zp+z0)/z0)), 0.0, 0.0)";
+         value 		$internalField;
+         variables (	
+              "U2=1.93;" 
+              "ZU=2.00;" 
+	      "z0=0.13;"
+	      "CMU=0.033;"
+	      "C1=-0.01;"
+	      "C2=1.23;"
+	      "K=0.4187;"
+	      "zp=pos().z-4.04;"
+	      "uStar=K*U2/log((z0+ZU)/z0);"
+	       );
+/*	timelines     
+          (
+	  {
+            name            U2;
+            fileName        "$FOAM_CASE/U.data";
+            outOfBounds     clamp;
+          }
+          );
+        lookuptables    (
+	  {
+             name            U2Lookup;
+             fileName        "$FOAM_CASE/U.data";
+             outOfBounds     clamp;
+          }
+          );*/
+       }
+
+    outlet
+    {
+        type            inletOutlet;//zeroGradient;
+        inletValue      $internalField;
+        value           $internalField;
+     }
+ 
+
+    top
+    {
+        type		symmetryPlane;//slip;//zeroGradient;
+ 
+    }
+
+
+    terrain
+    {
+	type            fixedValue;
+	value		uniform (0 0 0);
+    }
+
+
+    front
+    {
+        type            symmetryPlane;//slip;
+    }
+
+    back
+    {
+        type            symmetryPlane;//slip;
+    }
+    lake
+    {
+	type            fixedValue;
+	value		uniform (0 0 0);
+    }
+}
+// ************************************************************************* //

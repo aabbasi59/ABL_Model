@@ -1,0 +1,112 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -3 0 0 0 0];
+
+#include        "include/initialConditions"
+
+#include        "include/ABLConditions"
+
+epsilon_initial   0.001;//#calc "pow(pow($Ustar,2)/sqrt($CMU),1.5)*pow($CMU,0.75)/1";//as a good estimate e=turbulentKE^1.5*Cmu^0.75/l
+
+internalField   uniform $epsilon_initial;     
+
+boundaryField
+{
+  inlet
+       { 
+        type		groovyBC;
+        valueExpression "pow(uStar,3)/(kvan*(zp+z0))*sqrt(C1*log((zp+z0)/z0)+C2)";
+        value 		0.0271;//$internalField;
+        variables
+                (
+		 "U2=1.93;"               
+		 "ZU=2.00;" 
+		 "z0=0.13;"
+		 "CMU=0.033;"
+		 "C1=-0.01;"
+		 "C2=1.23;"
+		 "kvan=0.4187;"
+		 "zp=pos().z-4.04;"
+		 "uStar=kvan*U2/log((z0+ZU)/z0);"
+		 );
+/*	timelines     
+          (
+	  {
+            name            U2;
+            fileName        "$FOAM_CASE/U.data";
+            outOfBounds     clamp;
+          }
+          );
+        lookuptables    (
+	  {
+             name            U2Lookup;
+             fileName        "$FOAM_CASE/U.data";
+             outOfBounds     clamp;
+          }
+          );*/
+       }
+
+    outlet
+    {
+        type            zeroGradient;
+     }
+ 
+
+    top
+    {
+	type		symmetryPlane;//slip;//zeroGradient;
+    }
+
+
+    terrain
+    {
+        type            epsilonWallFunction;
+        kappa           $vonKarman;
+	Cmu		0.033;
+        E               $E;
+        value           0.0271;//$internalField;
+    }
+
+
+/*    frontAndBack
+    {
+        type            empty;
+    }
+ */
+    front
+    {
+        type            symmetryPlane;//slip;//zeroGradient;
+    }
+
+    back
+    {
+        type            symmetryPlane;//slip;//zeroGradient;
+    }
+
+    lake
+    {
+        type            epsilonWallFunction;
+        kappa           $vonKarman;
+	Cmu		0.033;
+        E               $E;
+        value           0.00065;//$internalField;
+    }
+}
+
+
+// ************************************************************************* //

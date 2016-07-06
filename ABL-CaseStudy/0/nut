@@ -1,0 +1,83 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      nut;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -1 0 0 0 0];
+
+#include "include/initialConditions" 
+
+#include "include/ABLConditions" 
+
+internalField   uniform $nut_initial;
+
+boundaryField
+{
+
+   inlet
+    {
+        type            calculated;
+	//value 		$internalField;  
+    }   
+
+
+    outlet
+    {
+        type            calculated;
+	value 		$internalField;  
+     }
+ 
+
+    top
+    {
+        type            symmetryPlane;//calculated;
+	//value 		$internalField;  
+    }
+
+
+   terrain
+    {
+        type            nutkRoughWallFunction;
+	Ks		uniform 1.70;//E*z0/Cs";
+	Cs		uniform 0.75;//$Cs;
+	value 		$internalField;        	
+    }
+
+
+/*    frontAndBack
+    {
+        type            empty;
+    }
+*/
+    front
+    {
+        type            symmetryPlane;//calculated;//zeroGradient;//
+    }
+
+    back
+    {
+        type            symmetryPlane;//calculated;//zeroGradient;//
+    }
+   lake
+    {
+        type            nutkWallFunction;
+	Ks		uniform 0.00131;//#calc "$E*$z0_lake/$Cs";z0=0.0001
+	Cs		uniform 0.75;//$Cs;
+	value 		$internalField;        	
+    }
+}
+
+
+// ************************************************************************* //

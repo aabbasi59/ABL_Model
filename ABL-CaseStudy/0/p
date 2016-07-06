@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include        "include/initialConditions"
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 0.0;//$pressure;
+
+boundaryField
+{
+    top
+    {
+        type            symmetryPlane;//calculated;//zeroGradient;//  Ref. no. TH05
+    }
+
+
+    terrain
+    {
+        type            calculated;//zeroGradient; //  Ref. no. TH05
+    }
+
+
+    inlet
+    {
+        type           calculated;//zeroGradient; //  Ref. no. TH05
+    }
+
+
+    outlet
+    {
+        type            calculated;//fixedValue; //  Ref. no. TH05
+        //value           uniform $pressure;
+    }
+
+
+/*    frontAndBack
+    {
+        type            empty;
+    }
+*/
+    front
+    {
+        type            symmetryPlane;//calculated;//zeroGradient;//cyclic;
+    }
+
+    back
+    {
+        type           symmetryPlane;//calculated;// zeroGradient;//cyclic;
+    }
+    lake
+    {
+        type            calculated;//zeroGradient; //  Ref. no. TH05
+    }
+
+ }
+
+// ************************************************************************* //

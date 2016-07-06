@@ -1,0 +1,103 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+#include        "include/initialConditions"
+
+#include "include/ABLConditions"
+
+k_initial	0.1;//#calc "sqr($Ustar)/sqrt($CMU)";//the turbulent kinematic energy(TKE) calculated as Ustar^2/Cmu^1/2
+
+internalField   uniform $k_initial;
+
+boundaryField
+{
+  inlet
+       { 
+        type		groovyBC;
+        valueExpression "sqr(uStar)/sqrt(CMU)* sqrt(C1*log((zp+z0)/z0)+C2)";
+        value 		0.2784;//$internalField;
+        variables
+                (
+		 "U2=1.93;" 
+		 "ZU=2.00;" 
+		 "z0=0.13;"
+		 "CMU=0.033;"
+		 "C1=-0.01;"
+		 "C2=1.23;"
+		 "kvan=0.40;"
+		 "zp=pos().z-4.04;"
+		 "uStar=kvan*U2/log((z0+ZU)/z0);"
+		 );
+/*	timelines     
+          (
+	  {
+            name            U2;
+            fileName        "$FOAM_CASE/U.data";
+            outOfBounds     clamp;
+          }
+          );
+        lookuptables    (
+	  {
+             name            U2Lookup;
+             fileName        "$FOAM_CASE/U.data";
+             outOfBounds     clamp;
+          }
+          );*/
+       }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+
+    top
+    {
+	type		symmetryPlane;//slip;//zeroGradient;      
+    }
+
+
+    terrain
+    {
+        type            kqRWallFunction;
+	value		0.2784;//$internalField; 
+    }
+
+
+/*    frontAndBack
+    {
+        type            empty;
+    }
+*/
+    front
+    {
+        type            symmetryPlane;//slip;//zeroGradient;
+    }
+
+    back
+    {
+        type            symmetryPlane;//slip;//zeroGradient;;
+    }
+    lake
+    {
+        type            kqRWallFunction;
+	value		0.0222;//$internalField; 
+    }
+}
+
+// ************************************************************************* //
