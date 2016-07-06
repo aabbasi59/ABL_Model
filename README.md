@@ -7,3 +7,5 @@ ABL model was validated using a range of different test cases extracted from num
 The results show that the developed model can be used to study airflow and improves the prediction of the flow characteristics of neutral and non-neutral ABL flow over complex and non-homogeneous surfaces (terrain). The results of the model could be used to investigate the flow parameters and (heat) flux variations over small water surfaces considering its surrounding conditions.
 
 For more details please send an e-mail to: aliabbasi.civileng@gmail.com & a.abbasi@tudelft.nl
+DOI URL: https://zenodo.org/badge/latestdoi/13432/aabbasi59/ABL_Model
+
