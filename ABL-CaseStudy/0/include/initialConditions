@@ -1,0 +1,19 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+flowVelocity	(0 0 0);
+pressure	0;//0;
+nut_initial	0.0;//1e-5;
+//turbulentKE_land1	0.8704;//the turbulent kinematic energy(TKE) calculated as Ustar^2/Cmu^1/2
+//turbulentKE_water	0.3862;
+//turbulentKE_land2	0.3862;
+//turbulentEpsilon_land1	0.1334;//as a good estimate e=turbulentKE^1.5*Cmu^0.75/l
+//turbulentEpsilon_land2	0.01;
+//turbulentEpsilon_water	0.001;
+
+//****************************************************************************

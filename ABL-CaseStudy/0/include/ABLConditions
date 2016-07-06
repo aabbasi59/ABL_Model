@@ -1,0 +1,20 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+//Ustar			0.00;
+z0			0.13;//0.03; 
+z0_lake			0.0001;
+turbulentKE_land1	0.8704; //the inlet turbulent kinematic energy calculated as Ustar^2/Cmu^1/2
+Ks_terrain      	0.0025;
+Ks_lake          	0.0025;
+Cs			0.75;
+E			9.793;
+vonKarman		0.4187;
+CMU			0.09;
+		
+//****************************************************************************
