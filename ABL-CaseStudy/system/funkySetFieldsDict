@@ -1,0 +1,104 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      funkySetFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+expressions
+(
+	epsilon_field_terrain
+	{
+	 field epsilon; 
+	         variables
+                 (
+                 "U2=1.93;"
+		 "ZU=2.00;" 
+		 "z0=0.13;"
+		 "CMU=0.033;"
+		 "C1=-0.01;"
+		 "C2=1.23;"
+		 "kvan=0.4187;"
+		 "zp=pos().z-4.04;"
+		 "uStar=kvan*U2/log((z0+ZU)/z0);"
+		 );
+          expression 	"pow(uStar,3)/(kvan*(zp+z0))*sqrt(C1*log((zp+z0)/z0)+C2)";
+	  condition  "pos().z<=5.04";
+          valuePatches ("terrain");
+          keepPatches 0; 
+          //create	true;
+	}
+	epsilon_field_lake
+	{
+	 field epsilon; 
+	         variables
+                 (
+                 "U2=1.93;"
+		 "ZU=2.00;" 
+		 "z0=0.0001;"
+		 "CMU=0.033;"
+		 "C1=-0.01;"
+		 "C2=1.23;"
+		 "kvan=0.4187;"
+		 "zp=pos().z-4.04;"
+		 "uStar=kvan*U2/log((z0+ZU)/z0);"
+		 );
+          expression 	"pow(uStar,3)/(kvan*(zp+z0))*sqrt(C1*log((zp+z0)/z0)+C2)";
+	  condition  "pos().z<=5.04";
+          valuePatches ("lake");
+          keepPatches 0; 
+          //create	true;
+	}
+	epsilon_field
+	{
+	 field epsilon; 
+	         variables
+                 (
+                 "U2=1.93;"
+		 "ZU=2.00;" 
+		 "z0=0.13;"
+		 "CMU=0.033;"
+		 "C1=-0.01;"
+		 "C2=1.23;"
+		 "kvan=0.4187;"
+		 "zp=pos().z-4.04;"
+		 "uStar=kvan*U2/log((z0+ZU)/z0);"
+		 );
+          expression 	"pow(uStar,3)/(kvan*(zp+z0))*sqrt(C1*log((zp+z0)/z0)+C2)";
+ 	  condition  "pos().z>5.04";
+          //valuePatches "terrain";
+          keepPatches 0; 
+          //create	true;
+	}
+	k_field
+	{
+	 field k; 
+	         variables
+                 (
+		 "U2=1.93;" 
+		 "ZU=2.00;" 
+		 "z0=0.13;"
+		 "CMU=0.033;"
+		 "C1=-0.01;"
+		 "C2=1.23;"
+		 "kvan=0.40;"
+		 "zp=pos().z-4.04;"
+		 "uStar=kvan*U2/log((z0+ZU)/z0);"
+		 );
+          expression 	"sqr(uStar)/sqrt(CMU)* sqrt(C1*log((zp+z0)/z0)+C2)";
+	  //condition  "pos().z.5.04";
+          //valuePatches "terrain";
+          keepPatches 0; 
+           //create	true;
+	}
+);

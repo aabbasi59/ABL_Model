@@ -1,0 +1,77 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     ABLbuoyantBoussinesqPimpleFoam_SS;//simpleFoam;//LakebuoyantBoussinesqPisoFoam01;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         272800;//equal to one 2 day =2*24*60*60
+
+deltaT          0.010;//0.1;
+
+writeControl    adjustableRunTime;//adjustableRunTime;/
+
+writeInterval   100;//90;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   8;
+
+runTimeModifiable true;
+adjustTimeStep  yes;
+
+maxCo           0.5;
+//minCo		0.01
+maxDeltaT	100;
+libs
+(
+   "libgroovyBC.so" 
+   "libOpenFOAM.so"
+   "libsimpleSwakFunctionObjects.so"
+   "libswakFunctionObjects.so"
+   //"libuserRAS_realizableKE_SS_02.so"
+   "libuserRAS_kEpsilon_SS.so"
+   "libincompressibleRASModels.so"
+   "libincompressibleTurbulenceModel.so"
+   "libincompressibleRASModels.so"
+   //"libuserRAS_ke_SS.so"
+   "libsimpleSearchableSurfaces.so"
+   "libswakTransportTurbFunctionPlugin.so"
+   //"libswakPythonIntegration.so"
+   "libswakMeshQualityFunctionPlugin.so"
+   "libswakLocalCalculationsFunctionPlugin.so"
+);
+
+functions
+{
+     // #include "myFunctions"
+      //#include "myFunctions_2"
+}
+
+// ************************************************************************* //

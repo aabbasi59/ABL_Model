@@ -1,0 +1,233 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM Extend Project: Open Source CFD        |
+|  \\    /   O peration     | Version:  1.6-ext                               |
+|   \\  /    A nd           | Web:      www.extend-project.de                 |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+/*    p_rgh
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-5;
+        relTol          0.01;
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+        relTol          0.0;
+    }
+*/
+    "(U|T|q)"
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-5;//1e-5;
+        //relTol          0.1;
+    }
+
+    "(k|epsilon|R)"
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-5;//1e-5;
+        //relTol          0.1;
+    }
+
+    "(U|T|q)Final"
+    {
+        $U;
+        relTol          0.0;
+    }
+
+    "(k|epsilon|R)Final"
+    {
+        $U;
+        relTol          0.0;
+    }
+
+/*    "(U|T|k|epsilon|R)"
+        solver          smoothSolver;   // solver type
+        smoother        GaussSeidel;    // smoother type
+        tolerance       1e-05;          // solver finishes if either absolute
+        relTol          0.0;           // tolerance is reached or the relative
+                                        // tolerance here
+        nSweeps         1;              // setting for smoothSolver
+        maxIter         100;            // limitation of iterations number
+    }
+    "(U|T|k|epsilon|R)Final"
+        solver          smoothSolver;   // solver type
+        smoother        GaussSeidel;    // smoother type
+        tolerance       1e-05;          // solver finishes if either absolute
+        relTol          0.0;           // tolerance is reached or the relative
+                                        // tolerance here
+        nSweeps         1;              // setting for smoothSolver
+        maxIter         100;            // limitation of iterations number
+    }
+*/
+
+ /*   pcorr
+    {
+	solver GAMG;
+	tolerance 1e-5;
+	relTol 0;
+	smoother DICGaussSeidel;
+	cacheAgglomeration on;
+	nCellsInCoarsestLevel 20; // This one is very important, please change in according to your case
+	agglomerator faceAreaPair;
+	mergeLevels 3;//1;
+	maxIter 10000;
+     }
+
+	p
+	{
+	$pcorr;
+	tolerance 1e-5;
+	relTol 0.01;
+	}
+*/
+/*
+
+       p
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-06;
+        relTol          0.01;
+    }
+*/
+    p_rgh              // linear equation system solver for p
+    {
+        solver          GAMG;           // very efficient multigrid solver
+        tolerance       1e-5;//1e-05;          // solver finishes if either absolute
+        relTol          0.0;          // tolerance is reached or the relative
+                                        // tolerance here
+        minIter         1;              // a minimum number of iterations
+        maxIter         10000;            // limitation of iterions number
+        smoother        DICGaussSeidel;            // setting for GAMG
+        nPreSweeps      0;//1;              // 1 for p, set to 0 for all other!
+        nPostSweeps     2;              // 2 is fine
+        nFinestSweeps   2;              // 2 is fine
+        scaleCorrection true;           // true is fine
+        directSolveCoarsestLevel false; // false is fine
+        cacheAgglomeration on;          // on is fine; set to off, if dynamic
+                                        // mesh refinement is used!
+        nCellsInCoarsestLevel 10000;      // 500 is fine,
+                                        // otherwise sqrt(number of cells)
+        agglomerator    faceAreaPair;   // faceAreaPair is fine
+        mergeLevels     3;//1;              // 1 is fine
+    }
+    p_rghFinal              // linear equation system solver for p
+    {
+        solver          GAMG;           // very efficient multigrid solver
+        tolerance       1e-5;//1e-05;          // solver finishes if either absolute
+        relTol          0;          // tolerance is reached or the relative
+                                        // tolerance here
+        minIter         1;              // a minimum number of iterations
+        maxIter         10000;            // limitation of iterions number
+        smoother        DICGaussSeidel;            // setting for GAMG
+        nPreSweeps      0;//1;              // 1 for p, set to 0 for all other!
+        nPostSweeps     2;              // 2 is fine
+        nFinestSweeps   2;              // 2 is fine
+        scaleCorrection true;           // true is fine
+        directSolveCoarsestLevel false; // false is fine
+        cacheAgglomeration on;          // on is fine; set to off, if dynamic
+                                        // mesh refinement is used!
+        nCellsInCoarsestLevel 10000;      // 500 is fine,
+                                        // otherwise sqrt(number of cells)
+        agglomerator    faceAreaPair;   // faceAreaPair is fine
+        mergeLevels     3;//1;              // 1 is fine
+    }
+}
+
+ PIMPLE
+ {
+     momentumPredictor yes;//no;
+     nOuterCorrectors 1;//5://2;//2;//1;
+     nCorrectors     2;//1;//2;
+     nNonOrthogonalCorrectors 1;//2;//0;
+     residualControl
+     {
+         p_rgh
+         {
+             tolerance 1e-03;
+             relTol 0;
+             absTol 0;
+        }
+         U
+         {
+             tolerance 1e-03;
+             relTol 0;
+             absTol 0;
+        }
+         "(k|epsilon)"
+         {
+             tolerance 1e-03;
+             relTol 0;
+             absTol 0;
+        }
+       
+     }
+     pRefPoint        (4000 0 4.03);//(650 650 7.0);// 0;//pRefPoint       (1130 620 7.8);//pRefCell        0;//3555818;//0;//pRefPoint        (100 100 9.0);//
+     pRefValue       101215;
+ }
+potentialFlow
+{
+    nNonOrthogonalCorrectors 1;
+}
+
+
+SIMPLE
+{
+    //momentumPredictor yes;//no;
+    //nOuterCorrectors 5;//5://2;//2;//1;
+    //nCorrectors     3;//1;//2;
+    //nNonOrthogonalCorrectors 0;//2;//0;
+    nNonOrthogonalCorrectors 5;
+    nCorrectors 10;
+   /* residualControl
+    {
+        p_rgh               1e-3;
+        U               1e-4;
+        "(k|epsilon)"   1e-4;
+    }*/
+    pRefCell        0;// 0;//pRefPoint       (1130 620 7.8);//pRefCell        0;//3555818;//0;//pRefPoint        (100 100 9.0);//
+    pRefValue       0;
+  /*  residualControl
+    {
+        p_rgh           1e-5;
+        U               1e-5;
+        T               1e-4;
+
+        // possibly check turbulence fields
+        "(k|epsilon|omega)" 1e-5;
+    }*/
+}
+relaxationFactors
+{
+    fields
+    {
+    }
+    equations
+    {
+        "(p|p_rgh)" 0.3;//0.3;
+        "(p|p_rgh)Final" 0.3;//0.3;
+        "(U|T|q|k|epsilon|R)" 0.3;//0.7
+        "(U|T|q|k|epsilon|R)Final" 0.3;//0.7
+    }
+}
+
+// ************************************************************************* //
