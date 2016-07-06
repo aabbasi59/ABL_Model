@@ -1,0 +1,39 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+CFactor 1;
+L1 500.00;//0.00;//774632.902;
+L2 4000.00;//1210.074;
+W1 0.00;//0.00;
+W2 1850.00;//940.564;
+H1 4.0399;
+H2 14.04;//8.632;
+H3 114.04;//8.000;
+H4 504.04;//8.000;
+meshN_x1	140;//60;//400;//500;	// number of meshes in X-Direction for land 1
+meshR_x1	1.0;	//the ration between the last and first mesh size in X-Direction for land 1
+//meshN_x2	100;	// number of meshes in X-Direction for water
+//meshR_x2	1.0;	//the ration between the last and first mesh size in X-Direction for water
+//meshN_x3	20;	// number of meshes in X-Direction for land 2
+//meshR_x3	1; 	//the ration between the last and first mesh size in X-Direction for land 2
+meshN_y1	74;//40;//300;	// number of meshes in Y-Direction for land 1
+meshR_y1	1.0;	//the ration between the last and first mesh size in Y-Direction for land 1
+//meshN_y2	1;	// number of meshes in Y-Direction for water
+//meshR_y2	1;	//the ration between the last and first mesh size in Y-Direction for water
+//meshN_y3	50;	// number of meshes in Y-Direction for land 2
+//meshR_y3	1;	//the ration between the last and first mesh size in Y-Direction for land 2
+meshN_z1	25;//9	// number of meshes in Z-Direction for land 1
+meshR_z1	1.17;	//the ration between the last and first mesh size in Z-Direction for land 1
+meshN_z2	20;	// number of meshes in Z-Direction for water
+meshR_z2	1;	//the ration between the last and first mesh size in Z-Direction for water
+meshN_z3	39;	// number of meshes in Z-Direction for land 2
+meshR_z3	1;	//the ration between the last and first mesh size in Z-Direction for land 2
+
+#inputMode           merge
+		
+//****************************************************************************
